@@ -79,10 +79,10 @@ img {
   }
 
   @media (max-width: 768px) {
-    .order-1 {
+    .order-mob-1 {
         order: 0;
     }
-    .order-2 {
+    .order-mob-2 {
         order: 1;
     }
     .dobra {
