@@ -1,11 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Erotização da mulher negra</title>
+  <meta charset="UTF-8">
+  <title>Comentários Anônimos</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    .comment { border-bottom: 1px solid #ccc; margin: 10px 0; padding: 10px 0; }
+  </style>
 </head>
 <body>
-    teste
+
+  <h2>Deixe um comentário</h2>
+  <form id="commentForm">
+    <input type="text" id="name" placeholder="Seu nome" required><br><br>
+    <textarea id="message" placeholder="Escreva algo..." required></textarea><br><br>
+    <button type="submit">Enviar</button>
+  </form>
+
+  <h3>Comentários</h3>
+  <div id="comments"></div>
+
+  <script>
+    // Configuração do Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyA7YKk8DhiI-07Qul2s_W9i3___v9tWaO4",
+      authDomain: "trabalho-sabrina.firebaseapp.com",
+      databaseURL: "https://trabalho-sabrina-default-rtdb.firebaseio.com",
+      projectId: "trabalho-sabrina",
+      storageBucket: "trabalho-sabrina.firebasestorage.app",
+      messagingSenderId: "377652430488",
+      appId: "1:377652430488:web:b20e93294b738a92f772ed"
+    };
+
+    // Inicializar o Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // Enviar comentário
+    document.getElementById('commentForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const message = document.getElementById('message').value;
+      const timestamp = Date.now();
+
+      db.ref('comments/' + timestamp).set({
+        name,
+        message,
+        timestamp
+      });
+
+      document.getElementById('commentForm').reset();
+    });
+
+    // Carregar comentários
+    db.ref('comments').on('value', (snapshot) => {
+      const commentsDiv = document.getElementById('comments');
+      commentsDiv.innerHTML = '';
+
+      const data = snapshot.val();
+      if (data) {
+        const keys = Object.keys(data).sort().reverse();
+        keys.forEach((key) => {
+          const comment = data[key];
+          const el = document.createElement('div');
+          el.className = 'comment';
+          el.innerHTML = `<strong>${comment.name}</strong><br>${comment.message}`;
+          commentsDiv.appendChild(el);
+        });
+      }
+    });
+  </script>
+
 </body>
 </html>
