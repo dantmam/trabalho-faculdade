@@ -5,6 +5,7 @@
   <title>Comentários Anônimos</title>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <style>
     body { font-family: Arial; padding: 20px; }
     .comment { border-bottom: 1px solid #ccc; margin: 10px 0; padding: 10px 0; }
@@ -16,6 +17,7 @@
   <form id="commentForm">
     <input type="text" id="name" placeholder="Seu nome" required><br><br>
     <textarea id="message" placeholder="Escreva algo..." required></textarea><br><br>
+    <div class="g-recaptcha" data-sitekey="6Ld3xhgrAAAAAGNPfwzbLrmgzO8sXLw6kUI9uItQ"></div>
     <button type="submit">Enviar</button>
   </form>
 
@@ -74,4 +76,5 @@
   </script>
 
 </body>
+<script src="style.js"></script>
 </html>
