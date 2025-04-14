@@ -25,7 +25,6 @@
   <div id="comments"></div>
 
   <script>
-    // Configuração do Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyA7YKk8DhiI-07Qul2s_W9i3___v9tWaO4",
       authDomain: "trabalho-sabrina.firebaseapp.com",
@@ -36,27 +35,40 @@
       appId: "1:377652430488:web:b20e93294b738a92f772ed"
     };
 
-    // Inicializar o Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // Enviar comentário
-    document.getElementById('commentForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-      const name = document.getElementById('name').value;
-      const message = document.getElementById('message').value;
-      const timestamp = Date.now();
+    document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById('commentForm').addEventListener('submit', function (e) {
+        e.preventDefault();
 
-      db.ref('comments/' + timestamp).set({
-        name,
-        message,
-        timestamp
+        const recaptchaResponse = grecaptcha.getResponse();
+        if (!recaptchaResponse) {
+          alert("Por favor, confirme que você não é um robô.");
+          return;
+        }
+
+        const name = document.getElementById('name').value.trim();
+        const message = document.getElementById('message').value.trim();
+
+        if (!name || !message) {
+          alert("Preencha todos os campos.");
+          return;
+        }
+
+        const timestamp = Date.now();
+
+        db.ref('comments/' + timestamp).set({
+          name,
+          message,
+          timestamp
+        });
+
+        document.getElementById('commentForm').reset();
+        grecaptcha.reset();
       });
-
-      document.getElementById('commentForm').reset();
     });
 
-    // Carregar comentários
     db.ref('comments').on('value', (snapshot) => {
       const commentsDiv = document.getElementById('comments');
       commentsDiv.innerHTML = '';
