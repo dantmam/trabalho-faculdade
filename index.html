@@ -76,13 +76,25 @@
       const data = snapshot.val();
       if (data) {
         const keys = Object.keys(data).sort().reverse();
-        keys.forEach((key) => {
-          const comment = data[key];
-          const el = document.createElement('div');
-          el.className = 'comment';
-          el.innerHTML = `<strong>${comment.name}</strong><br>${comment.message}`;
-          commentsDiv.appendChild(el);
-        });
+keys.forEach((key) => {
+  const comment = data[key];
+
+  // FORMATAR DATA E HORA
+  const date = new Date(comment.timestamp);
+  const formattedDate = date.toLocaleString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+
+  const el = document.createElement('div');
+  el.className = 'comment';
+  el.innerHTML = `<strong>${comment.name}</strong> <small>em ${formattedDate}</small><br>${comment.message}`;
+  commentsDiv.appendChild(el);
+});
+
       }
     });
   </script>
